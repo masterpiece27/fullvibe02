@@ -12,7 +12,6 @@
     * {
       box-sizing: border-box;
     }
-
     html, body {
       margin: 0;
       padding: 0;
@@ -21,7 +20,6 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       overflow-x: hidden;
     }
-
     .page {
       width: 100%;
       max-width: 480px;
@@ -30,14 +28,12 @@
       min-height: 100vh;
       box-shadow: 0 0 20px rgba(0,0,0,0.8);
     }
-
     /* Video Player Box */
     .video-box {
       width: 100%;
       background: #000;
       position: relative;
     }
-
     video {
       width: 100%;
       max-height: 70vh;
@@ -45,12 +41,10 @@
       display: block;
       background: #000;
     }
-
     video::-webkit-media-controls-fullscreen-button,
     video::-webkit-media-controls-overflow-button {
       display: none !important;
     }
-
     /* Section & Container Titles */
     .rec-title {
       color: #fff;
@@ -59,7 +53,6 @@
       padding: 16px 15px 8px;
       letter-spacing: 0.3px;
     }
-
     /* Ads Card Containers */
     .ads-card {
       margin: 12px 15px;
@@ -69,7 +62,6 @@
       border-radius: 8px;
       text-align: center;
     }
-
     .ads-label {
       font-size: 10px;
       color: #888;
@@ -77,14 +69,12 @@
       letter-spacing: 1px;
       margin-bottom: 8px;
     }
-
     .banner-box {
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: hidden;
     }
-
     .native-wrap {
       padding: 10px;
       display: flex;
@@ -93,11 +83,9 @@
     }
   </style>
 </head>
-
 <body>
 
   <div class="page">
-
     <!-- VIDEO PLAYER -->
     <div class="video-box">
       <video
@@ -111,7 +99,7 @@
         controlsList="nodownload noremoteplayback"
         disablePictureInPicture
       >
-        <!-- Source diatur melalui JavaScript -->
+        <!-- Source diatur melalui JavaScript di bawah -->
       </video>
     </div>
 
@@ -143,27 +131,39 @@
       <script async="async" data-cfasync="false" src="https://zealoushavoc.com/a2a867762f84548fa6265691620b5e11/invoke.js"></script>
       <div id="container-a2a867762f84548fa6265691620b5e11"></div>
     </div>
-
   </div>
 
   <!-- PLAYER SCRIPT -->
   <script>
     (function () {
       const params = new URLSearchParams(window.location.search);
-      let video = params.get("v");
+      let videoCode = params.get("v");
+      
+      let videoUrl = "";
 
-      if (video) {
-        if (!video.startsWith("http")) {
-          video = "https://cdn.videy.co/" + video;
+      if (videoCode) {
+        // Jika parameter yang dikirim berupa link utuh (http...)
+        if (videoCode.startsWith("http")) {
+          videoUrl = videoCode;
+        } else {
+          // Jika parameter hanya berupa kode videy, otomatis pasang domain cdn2 dan .mp4
+          videoUrl = "https://cdn2.videy.co/" + videoCode + ".mp4";
         }
       } else {
-        video = "https://cdn.videy.co/k84OOz1w1.mp4";
+        // Video default jika link dibuka tanpa parameter ?v=
+        videoUrl = "https://cdn2.videy.co/U0f0lNOw1.mp4";
       }
 
       const player = document.getElementById("player");
-      
+            
       // Set sumber video
-      player.src = video;
+      player.src = videoUrl;
+
+      // Load dan jalankan pemutar video
+      player.load();
+      player.play().catch(error => {
+        console.log("Autoplay dicegah oleh browser, butuh interaksi user:", error);
+      });
 
       // Anti klik kanan pada pemutar video
       player.addEventListener("contextmenu", e => e.preventDefault());
